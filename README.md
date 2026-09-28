@@ -68,3 +68,4 @@ O pipeline é do tipo *Pipeline script from SCM*, apontando para este repositór
 ## Documentação
 
 O levantamento de requisitos, wireframes, modelagem UML e arquitetura do sistema estão documentados na entrega TG1 do projeto.
+
