@@ -1,6 +1,5 @@
 # Chuteira Digital ⚽
 
-![CI](https://github.com/kauanrot/Chuteira-Digital/actions/workflows/ci.yml/badge.svg)
 
 Sistema web para gestão administrativa e operacional de uma escola de futebol, desenvolvido como projeto da disciplina de **Laboratório de Engenharia de Software** (Universidade Presbiteriana Mackenzie).
 
