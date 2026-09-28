@@ -1,6 +1,5 @@
 # Chuteira Digital ⚽
 
-
 Sistema web para gestão administrativa e operacional de uma escola de futebol, desenvolvido como projeto da disciplina de **Laboratório de Engenharia de Software** (Universidade Presbiteriana Mackenzie).
 
 O objetivo é substituir o controle manual em planilhas e cadernos por um ambiente único, facilitando o cadastro de alunos, professores e turmas, o controle de presença e o acompanhamento financeiro (mensalidades, bolsas e doações).
@@ -33,13 +32,13 @@ Arquitetura cliente-servidor em três camadas (apresentação, aplicação e dad
 | Persistência | Prisma (ORM) |
 | Autenticação | JWT + bcrypt |
 | Testes | Jest |
-| CI/CD | GitHub Actions |
+| CI/CD | Jenkins |
 
 ## Estrutura do repositório
 
 ```
 .
-├── .github/workflows/ci.yml # Esteira de CI: instala dependências e roda os testes a cada push/PR
+├── Jenkinsfile                # Esteira de CI: instala dependências e roda os testes a cada build
 ├── TG2/
 │   └── src/
 │       └── models/
@@ -58,7 +57,13 @@ npm test
 
 ## Esteira de CI/CD
 
-A cada push ou pull request na branch `main`, o GitHub Actions instala as dependências e executa a suíte de testes automaticamente. O status da última execução aparece no badge no topo deste README.
+A esteira do projeto roda em um pipeline Jenkins (`Jenkinsfile`), com três estágios:
+
+1. **Checkout** — clona o código diretamente deste repositório.
+2. **Instalar dependências** — executa `npm install`.
+3. **Executar testes (Jest)** — executa `npm test` e falha o build se algum teste quebrar.
+
+O pipeline é do tipo *Pipeline script from SCM*, apontando para este repositório, e usa a instalação Node.js configurada no Jenkins (ferramenta `Node20`).
 
 ## Documentação
 
