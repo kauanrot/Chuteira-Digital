@@ -1,0 +1,18 @@
+{
+  "name": "chuteira-digital",
+  "version": "1.0.0",
+  "description": "Chuteira Digital - Sistema de gestao para escola de futebol (Projeto Laboratorio de Engenharia de Software - Mackenzie)",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "keywords": [
+    "chuteira-digital",
+    "escola-de-futebol"
+  ],
+  "author": "Kauan Rotondaro Dias Alves, Gabriel Medina Peres, Kaiki Bellini Barbosa",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
