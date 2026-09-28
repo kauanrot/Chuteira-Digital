@@ -1,5 +1,6 @@
 # Chuteira Digital ⚽
 
+![CI](https://github.com/kauanrot/Chuteira-Digital/actions/workflows/ci.yml/badge.svg)
 
 Sistema web para gestão administrativa e operacional de uma escola de futebol, desenvolvido como projeto da disciplina de **Laboratório de Engenharia de Software** (Universidade Presbiteriana Mackenzie).
 
@@ -39,11 +40,12 @@ Arquitetura cliente-servidor em três camadas (apresentação, aplicação e dad
 
 ```
 .
-├── .github/workflows/ci.yml   # Esteira de CI: instala dependências e roda os testes a cada push/PR
-├── src/
-│   └── models/
-│       ├── Turma.js           # Regra de negócio de matrícula e controle de vagas
-│       └── Turma.test.js      # Suíte de testes da classe Turma (Jest)
+├── .github/workflows/ci.yml # Esteira de CI: instala dependências e roda os testes a cada push/PR
+├── TG2/
+│   └── src/
+│       └── models/
+│           ├── Turma.js       # Regra de negócio de matrícula e controle de vagas (entrega TG2)
+│           └── Turma.test.js  # Suíte de testes da classe Turma (Jest)
 ├── package.json
 └── .gitignore
 ```
