@@ -1,0 +1,60 @@
+// Modelo de dados (PostgreSQL). Sera conectado aos repositorios na Sprint 4;
+// na Sprint 3 a API usa repositorios em memoria com o mesmo contrato.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Aluno {
+  id             Int         @id @default(autoincrement())
+  nome           String
+  dataNascimento DateTime
+  responsavel    String?
+  telefone       String?
+  email          String?
+  matriculas     Matricula[]
+  presencas      Presenca[]
+}
+
+model Turma {
+  id        Int         @id @default(autoincrement())
+  nome      String
+  categoria String
+  local     String?
+  vagas     Int
+  matriculas Matricula[]
+  chamadas  Chamada[]
+}
+
+model Matricula {
+  alunoId Int
+  turmaId Int
+  aluno   Aluno @relation(fields: [alunoId], references: [id])
+  turma   Turma @relation(fields: [turmaId], references: [id])
+
+  @@id([alunoId, turmaId])
+}
+
+model Chamada {
+  id        Int        @id @default(autoincrement())
+  turmaId   Int
+  data      DateTime   @db.Date
+  turma     Turma      @relation(fields: [turmaId], references: [id])
+  presencas Presenca[]
+
+  @@unique([turmaId, data])
+}
+
+model Presenca {
+  chamadaId Int
+  alunoId   Int
+  presente  Boolean
+  chamada   Chamada @relation(fields: [chamadaId], references: [id])
+  aluno     Aluno   @relation(fields: [alunoId], references: [id])
+
+  @@id([chamadaId, alunoId])
+}

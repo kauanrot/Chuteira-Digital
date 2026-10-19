@@ -1,0 +1,14 @@
+body { font-family: system-ui, sans-serif; background: #f4f7f4; margin: 0; color: #1b2b1b; }
+.container { max-width: 800px; margin: 0 auto; padding: 1rem; }
+nav { display: flex; gap: .5rem; margin-bottom: 1rem; }
+button { background: #1f7a3a; color: #fff; border: 0; padding: .5rem 1rem; border-radius: 6px; cursor: pointer; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+nav button { background: #cfe3d3; color: #1b2b1b; }
+nav button.ativo { background: #1f7a3a; color: #fff; }
+form { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+input, select { padding: .45rem; border: 1px solid #aab; border-radius: 6px; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { text-align: left; padding: .4rem .6rem; border-bottom: 1px solid #e3e8e3; }
+.card { background: #fff; padding: .8rem; border-radius: 8px; margin-bottom: .8rem; }
+.lista { list-style: none; padding: 0; }
+.erro { color: #b3261e; } .ok { color: #1f7a3a; }

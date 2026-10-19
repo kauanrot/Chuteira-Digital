@@ -4,6 +4,8 @@
   "description": "Chuteira Digital - Sistema de gestao para escola de futebol (Projeto Laboratorio de Engenharia de Software - Mackenzie)",
   "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
     "test": "jest --coverage"
   },
   "keywords": [
@@ -13,6 +15,21 @@
   "author": "Kauan Rotondaro Dias Alves, Gabriel Medina Peres, Kaiki Bellini Barbosa",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/*.test.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "src/index.js"
+    ]
   }
 }
