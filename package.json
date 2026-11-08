@@ -6,7 +6,12 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:db": "jest --runInBand",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:studio": "prisma studio"
   },
   "keywords": [
     "chuteira-digital",
@@ -19,8 +24,11 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "dotenv": "^18.0.9",
+    "express": "^4.19.2",
+    "prisma": "^6.19.3"
   },
   "jest": {
     "testEnvironment": "node",
@@ -29,7 +37,8 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "src/index.js"
+      "src/index.js",
+      "tests/helpers/"
     ]
   }
 }

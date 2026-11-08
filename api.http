@@ -1,0 +1,34 @@
+### Requisicoes de exemplo (extensao REST Client: clique em "Send Request")
+@base = http://localhost:3000/api
+
+GET {{base}}/health
+
+###
+POST {{base}}/alunos
+Content-Type: application/json
+
+{ "nome": "Joao", "dataNascimento": "2015-03-02", "responsavel": "Maria" }
+
+###
+GET {{base}}/alunos
+
+###
+POST {{base}}/turmas
+Content-Type: application/json
+
+{ "nome": "Sub-11", "categoria": "Sub-11", "vagas": 20 }
+
+###
+POST {{base}}/turmas/1/alunos
+Content-Type: application/json
+
+{ "alunoId": "1" }
+
+###
+POST {{base}}/turmas/1/chamadas
+Content-Type: application/json
+
+{ "data": "2026-11-08", "registros": [{ "alunoId": "1", "presente": true }] }
+
+###
+GET {{base}}/turmas/1/chamadas

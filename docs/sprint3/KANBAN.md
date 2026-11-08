@@ -13,8 +13,9 @@ Quadro sugerido no GitHub Projects (colunas: **Backlog | A fazer | Em andamento 
 - [x] Testes automatizados (Jest + Supertest) rodando na esteira Jenkins
 - [x] Documentação da Sprint 3
 
+- [x] Integração dos repositórios com PostgreSQL via Prisma
+
 ## Em andamento
-- [ ] Integração dos repositórios com PostgreSQL via Prisma
 
 ## A fazer (Sprint 4)
 - [ ] Autenticação JWT + bcrypt e perfis (Administrador, Professor, Responsável)

@@ -1,10 +1,11 @@
 const { Router } = require('express');
+const h = require('../middleware/asyncHandler');
 
 module.exports = (alunoService) => {
   const r = Router();
-  r.post('/', (req, res) => res.status(201).json(alunoService.cadastrar(req.body)));
-  r.get('/', (req, res) => res.json(alunoService.listar()));
-  r.get('/:id', (req, res) => res.json(alunoService.buscar(req.params.id)));
-  r.put('/:id', (req, res) => res.json(alunoService.atualizar(req.params.id, req.body)));
+  r.post('/', h(async (req, res) => res.status(201).json(await alunoService.cadastrar(req.body))));
+  r.get('/', h(async (req, res) => res.json(await alunoService.listar())));
+  r.get('/:id', h(async (req, res) => res.json(await alunoService.buscar(req.params.id))));
+  r.put('/:id', h(async (req, res) => res.json(await alunoService.atualizar(req.params.id, req.body))));
   return r;
 };

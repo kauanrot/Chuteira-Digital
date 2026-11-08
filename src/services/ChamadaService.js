@@ -10,8 +10,8 @@ class ChamadaService {
   /**
    * Alunos matriculados que nao constarem em `registros` sao marcados como ausentes.
    */
-  registrar({ turmaId, data, registros }) {
-    const turma = this.turmaRepo.buscarPorId(turmaId);
+  async registrar({ turmaId, data, registros }) {
+    const turma = await this.turmaRepo.buscarPorId(turmaId);
     if (!turma) throw new NotFoundError('Turma nao encontrada.');
 
     const matriculados = new Set(turma.listarAlunos().map((a) => a.id));
@@ -20,9 +20,7 @@ class ChamadaService {
         throw new AppError(`Aluno ${r && r.alunoId} nao esta matriculado na turma.`, 400);
       }
     }
-    const duplicada = this.chamadaRepo
-      .listar()
-      .some((c) => c.turmaId === turma.id && c.data === data);
+    const duplicada = (await this.chamadaRepo.listarPorTurma(turma.id)).some((c) => c.data === data);
     if (duplicada) throw new ConflictError('Ja existe chamada para esta turma nesta data.');
 
     const informados = new Set((registros || []).map((r) => r.alunoId));
@@ -39,9 +37,10 @@ class ChamadaService {
     }
     return this.chamadaRepo.salvar(chamada);
   }
-  listarPorTurma(turmaId) {
-    if (!this.turmaRepo.buscarPorId(turmaId)) throw new NotFoundError('Turma nao encontrada.');
-    return this.chamadaRepo.listar().filter((c) => c.turmaId === String(turmaId));
+  async listarPorTurma(turmaId) {
+    const turma = await this.turmaRepo.buscarPorId(turmaId);
+    if (!turma) throw new NotFoundError('Turma nao encontrada.');
+    return this.chamadaRepo.listarPorTurma(turma.id);
   }
 }
 module.exports = ChamadaService;
