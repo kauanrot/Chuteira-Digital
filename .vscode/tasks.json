@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "API: npm run dev", "type": "npm", "script": "dev", "isBackground": true, "problemMatcher": [] },
+    { "label": "Front-end: npm run dev", "type": "shell", "command": "npm run dev", "options": { "cwd": "${workspaceFolder}/frontend" }, "isBackground": true, "problemMatcher": [] },
+    { "label": "Banco: aplicar migrations", "type": "npm", "script": "db:migrate", "problemMatcher": [] },
+    { "label": "Banco: Prisma Studio", "type": "npm", "script": "db:studio", "isBackground": true, "problemMatcher": [] },
+    { "label": "Testes", "type": "npm", "script": "test", "group": { "kind": "test", "isDefault": true }, "problemMatcher": [] },
+    { "label": "Tudo: API + Front-end", "dependsOn": ["API: npm run dev", "Front-end: npm run dev"], "problemMatcher": [] }
+  ]
+}

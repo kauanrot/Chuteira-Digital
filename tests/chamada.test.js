@@ -1,5 +1,5 @@
 const request = require('supertest');
-const createApp = require('../src/app');
+const { novoApp, fecharBanco } = require('./helpers/app');
 const Chamada = require('../src/models/Chamada');
 
 describe('Chamada (modelo)', () => {
@@ -25,7 +25,7 @@ describe('UC03 - Registrar chamada (API)', () => {
   let app, turma, a1, a2;
   const mk = (n) => ({ nome: n, dataNascimento: '2016-01-01', responsavel: 'Resp' });
   beforeEach(async () => {
-    app = createApp();
+    app = await novoApp();
     turma = (await request(app).post('/api/turmas').send({ nome: 'Sub-10', categoria: 'Sub-10', vagas: 5 })).body;
     a1 = (await request(app).post('/api/alunos').send(mk('Joao'))).body;
     a2 = (await request(app).post('/api/alunos').send(mk('Pedro'))).body;
@@ -64,3 +64,5 @@ describe('UC03 - Registrar chamada (API)', () => {
     expect(res.body).toHaveLength(1);
   });
 });
+
+afterAll(fecharBanco);

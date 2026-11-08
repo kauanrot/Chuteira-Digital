@@ -1,0 +1,51 @@
+# Ambiente completo do Chuteira Digital: banco + API + front-end.
+#   Subir:  docker compose up -d --build
+#   Parar:  docker compose down        (os dados continuam no volume "pgdata")
+#   Logs:   docker compose logs -f api
+#
+# Cada conteiner faz uma unica atividade e eles se falam pela rede criada
+# pelo Compose, usando o nome do servico como hostname (db, api).
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-chuteira}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chuteira}
+      POSTGRES_DB: ${POSTGRES_DB:-chuteira_digital}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      # Acesso pelo host (Prisma Studio, extensao do VS Code). Usa 5433 para nao
+      # conflitar com um PostgreSQL instalado direto na maquina (porta 5432).
+      - "${DB_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    image: chuteira-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-chuteira}:${POSTGRES_PASSWORD:-chuteira}@db:5432/${POSTGRES_DB:-chuteira_digital}?schema=public
+      PORT: 3000
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-3000}:3000"
+
+  web:
+    build: ./frontend
+    image: chuteira-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "${WEB_PORT:-80}:80"
+
+volumes:
+  pgdata:

@@ -1,0 +1,19 @@
+# Arquivos que nao entram no build da imagem da API.
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+.vscode
+coverage
+docs
+frontend
+tests
+TG2/**/*.test.js
+*.http
+Dockerfile
+docker-compose.yml
+Jenkinsfile
+README.md

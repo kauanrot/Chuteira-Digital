@@ -1,25 +1,25 @@
 /**
- * Repositorio em memoria. Implementa o contrato (salvar/buscarPorId/listar)
- * que sera substituido por implementacao Prisma/PostgreSQL nas proximas sprints,
- * sem alterar services e rotas.
+ * Repositorio em memoria. Implementa o mesmo contrato assincrono
+ * (salvar/buscarPorId/listar/remover) dos repositorios Prisma, para que
+ * services e rotas funcionem igual nos testes e com o PostgreSQL.
  */
 class MemoryRepository {
   constructor() {
     this.items = new Map();
     this.seq = 0;
   }
-  salvar(entidade) {
+  async salvar(entidade) {
     if (!entidade.id) entidade.id = String(++this.seq);
     this.items.set(entidade.id, entidade);
     return entidade;
   }
-  buscarPorId(id) {
+  async buscarPorId(id) {
     return this.items.get(String(id)) || null;
   }
-  listar() {
+  async listar() {
     return [...this.items.values()];
   }
-  remover(id) {
+  async remover(id) {
     return this.items.delete(String(id));
   }
 }

@@ -1,5 +1,5 @@
-// Modelo de dados (PostgreSQL). Sera conectado aos repositorios na Sprint 4;
-// na Sprint 3 a API usa repositorios em memoria com o mesmo contrato.
+// Modelo de dados (PostgreSQL). Usado pelos repositorios Prisma em
+// src/repositories/prisma (ativados quando DATABASE_URL esta definida).
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,7 +12,7 @@ datasource db {
 model Aluno {
   id             Int         @id @default(autoincrement())
   nome           String
-  dataNascimento DateTime
+  dataNascimento DateTime    @db.Date
   responsavel    String?
   telefone       String?
   email          String?

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const createApp = require('../src/app');
+const { novoApp, fecharBanco } = require('./helpers/app');
 const Aluno = require('../src/models/Aluno');
 
 describe('Aluno (modelo)', () => {
@@ -34,7 +34,7 @@ describe('Aluno (modelo)', () => {
 
 describe('UC01 - Cadastrar aluno (API)', () => {
   let app;
-  beforeEach(() => { app = createApp(); });
+  beforeEach(async () => { app = await novoApp(); });
   const dados = { nome: 'Joao', dataNascimento: '2014-05-10', responsavel: 'Maria' };
 
   test('POST cria e GET lista', async () => {
@@ -63,3 +63,5 @@ describe('UC01 - Cadastrar aluno (API)', () => {
     expect(res.status).toBe(400);
   });
 });
+
+afterAll(fecharBanco);

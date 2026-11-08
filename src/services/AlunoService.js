@@ -6,7 +6,7 @@ class AlunoService {
   constructor(alunoRepo) {
     this.alunoRepo = alunoRepo;
   }
-  cadastrar(dados) {
+  async cadastrar(dados) {
     let aluno;
     try {
       aluno = new Aluno(dados || {});
@@ -15,22 +15,23 @@ class AlunoService {
     }
     return this.alunoRepo.salvar(aluno);
   }
-  listar() {
+  async listar() {
     return this.alunoRepo.listar();
   }
-  buscar(id) {
-    const aluno = this.alunoRepo.buscarPorId(id);
+  async buscar(id) {
+    const aluno = await this.alunoRepo.buscarPorId(id);
     if (!aluno) throw new NotFoundError('Aluno nao encontrado.');
     return aluno;
   }
-  atualizar(id, dados) {
-    const atual = this.buscar(id);
+  async atualizar(id, dados) {
+    const atual = await this.buscar(id);
+    let novo;
     try {
-      const novo = new Aluno({ ...atual, ...dados, id: atual.id });
-      return this.alunoRepo.salvar(novo);
+      novo = new Aluno({ ...atual, ...dados, id: atual.id });
     } catch (e) {
       throw new AppError(e.message, 400);
     }
+    return this.alunoRepo.salvar(novo);
   }
 }
 module.exports = AlunoService;

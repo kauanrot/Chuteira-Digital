@@ -7,7 +7,7 @@ class TurmaService {
     this.turmaRepo = turmaRepo;
     this.alunoRepo = alunoRepo;
   }
-  cadastrar(dados) {
+  async cadastrar(dados) {
     let turma;
     try {
       turma = new Turma(dados || {});
@@ -16,31 +16,31 @@ class TurmaService {
     }
     return this.turmaRepo.salvar(turma);
   }
-  listar() {
+  async listar() {
     return this.turmaRepo.listar();
   }
-  buscar(id) {
-    const turma = this.turmaRepo.buscarPorId(id);
+  async buscar(id) {
+    const turma = await this.turmaRepo.buscarPorId(id);
     if (!turma) throw new NotFoundError('Turma nao encontrada.');
     return turma;
   }
-  matricular(turmaId, alunoId) {
-    const turma = this.buscar(turmaId);
-    const aluno = this.alunoRepo.buscarPorId(alunoId);
+  async matricular(turmaId, alunoId) {
+    const turma = await this.buscar(turmaId);
+    const aluno = await this.alunoRepo.buscarPorId(alunoId);
     if (!aluno) throw new NotFoundError('Aluno nao encontrado.');
     try {
       turma.matricularAluno(aluno);
     } catch (e) {
       throw new ConflictError(e.message);
     }
-    return turma;
+    return this.turmaRepo.salvar(turma);
   }
-  desmatricular(turmaId, alunoId) {
-    const turma = this.buscar(turmaId);
+  async desmatricular(turmaId, alunoId) {
+    const turma = await this.buscar(turmaId);
     if (!turma.removerAluno(String(alunoId))) {
       throw new NotFoundError('Aluno nao esta matriculado nesta turma.');
     }
-    return turma;
+    return this.turmaRepo.salvar(turma);
   }
 }
 module.exports = TurmaService;

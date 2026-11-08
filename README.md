@@ -42,7 +42,9 @@ Arquitetura cliente-servidor em três camadas (apresentação, aplicação e dad
 ├── src/                 # Back-end (Express): models, repositories, services, routes
 ├── tests/               # Testes Jest + Supertest (UC01, UC02, UC03)
 ├── frontend/            # Front-end React + Vite
-├── prisma/schema.prisma # Modelo de dados PostgreSQL
+├── prisma/              # schema.prisma + migrations (PostgreSQL)
+├── Dockerfile           # Imagem da API
+├── docker-compose.yml   # Banco + API + front-end em contêineres
 ├── docs/sprint3/        # Kanban e documentação da Sprint 3
 ├── TG2/                 # Entrega TG2 (Turma + testes)
 └── package.json
@@ -54,11 +56,59 @@ Casos de uso implementados: **UC01 Cadastrar aluno**, **UC02 Cadastrar turma e m
 
 Para executar: `npm start` (API na porta 3000) e `cd frontend && npm install && npm run dev`.
 
+## Executando com Docker (recomendado)
+
+O `docker-compose.yml` sobe o sistema inteiro em três contêineres, cada um com uma única responsabilidade:
+
+| Serviço | Imagem | Porta no host | Função |
+|---|---|---|---|
+| `db` | `postgres:16` | 5433 | Banco de dados. Os dados ficam no volume nomeado `pgdata` |
+| `api` | `Dockerfile` (raiz) | 3000 | API Express + Prisma. Ao iniciar, aplica as migrations (`prisma migrate deploy`) |
+| `web` | `frontend/Dockerfile` | 80 | Build do React servido pelo Nginx, que repassa `/api` para o serviço `api` |
+
+```bash
+docker compose up -d --build   # constrói as imagens e sobe tudo
+docker compose ps              # status dos contêineres
+docker compose logs -f api     # logs da API
+docker compose down            # para tudo (os dados continuam no volume pgdata)
+```
+
+Depois de subir: front-end em http://localhost e API em http://localhost:3000/api/health.
+
+- Usuário, senha, nome do banco e portas podem ser trocados por variáveis no `.env` (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `DB_PORT`, `API_PORT`, `WEB_PORT`). Veja o `.env.example`.
+- `docker compose down -v` **apaga** o volume e, com ele, todos os dados do banco.
+- Na AWS (EC2), os mesmos comandos funcionam. Libere no Security Group as portas que forem acessadas de fora (80 para o front-end, 3000 se a API for acessada direto).
+
+## Banco de dados (PostgreSQL + Prisma)
+
+Os repositórios ficam em `src/repositories/`: `prisma/` (PostgreSQL) e as versões em memória, todas com o mesmo contrato assíncrono (`salvar/buscarPorId/listar/remover`). A API usa o PostgreSQL quando `DATABASE_URL` está definida; sem ela, cai para memória.
+
+Para desenvolver sem Docker na API (rodando `npm start` na máquina), basta subir só o banco no Docker:
+
+```bash
+cp .env.example .env          # DATABASE_URL já aponta para o banco do Docker (porta 5433)
+docker compose up -d db       # sobe apenas o PostgreSQL
+npm install                   # também roda "prisma generate"
+npm run db:migrate            # aplica as migrations em prisma/migrations
+npm start                     # API usando o PostgreSQL
+```
+
+- Ao mudar o `schema.prisma`, rode `npm run db:migrate -- --name <descricao>` para gerar uma nova migration.
+- Em servidor/produção use `npm run db:deploy` (aplica as migrations sem gerar novas).
+- `npm run db:studio` abre o Prisma Studio para inspecionar os dados.
+
 ## Como rodar os testes localmente
 
 ```bash
 npm install
-npm test
+npm test                      # em memória (é o que roda no Jenkins)
+```
+
+Para rodar **os mesmos testes contra o PostgreSQL**, aponte `TEST_DATABASE_URL` para um banco exclusivo de testes (ele é truncado a cada teste) com as migrations aplicadas:
+
+```bash
+DATABASE_URL="$TEST_DATABASE_URL" npx prisma migrate deploy
+npm run test:db
 ```
 
 ## Esteira de CI/CD

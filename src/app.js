@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const MemoryRepository = require('./repositories/MemoryRepository');
+const { criarRepositoriosMemoria } = require('./repositories');
 const AlunoService = require('./services/AlunoService');
 const TurmaService = require('./services/TurmaService');
 const ChamadaService = require('./services/ChamadaService');
@@ -10,12 +10,14 @@ const errorHandler = require('./middleware/errorHandler');
 
 /**
  * Monta a aplicacao em camadas: rotas (apresentacao/API) -> services (regra de negocio)
- * -> repositorios (dados). Os repositorios sao injetaveis para facilitar testes.
+ * -> repositorios (dados). Os repositorios sao injetaveis: em memoria por padrao
+ * (testes) ou Prisma/PostgreSQL (ver src/index.js).
  */
-function createApp({ alunoRepo, turmaRepo, chamadaRepo } = {}) {
-  alunoRepo = alunoRepo || new MemoryRepository();
-  turmaRepo = turmaRepo || new MemoryRepository();
-  chamadaRepo = chamadaRepo || new MemoryRepository();
+function createApp(repos = {}) {
+  const padrao = criarRepositoriosMemoria();
+  const alunoRepo = repos.alunoRepo || padrao.alunoRepo;
+  const turmaRepo = repos.turmaRepo || padrao.turmaRepo;
+  const chamadaRepo = repos.chamadaRepo || padrao.chamadaRepo;
 
   const alunoService = new AlunoService(alunoRepo);
   const turmaService = new TurmaService(turmaRepo, alunoRepo);

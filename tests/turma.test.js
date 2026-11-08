@@ -1,10 +1,10 @@
 const request = require('supertest');
-const createApp = require('../src/app');
+const { novoApp, fecharBanco } = require('./helpers/app');
 
 describe('UC02 - Cadastrar turma e matricular aluno (API)', () => {
   let app, turma, aluno;
   beforeEach(async () => {
-    app = createApp();
+    app = await novoApp();
     turma = (await request(app).post('/api/turmas').send({ nome: 'Sub-10', categoria: 'Sub-10', vagas: 1 })).body;
     aluno = (await request(app).post('/api/alunos').send({ nome: 'Joao', dataNascimento: '2016-01-01', responsavel: 'Maria' })).body;
   });
@@ -44,3 +44,5 @@ describe('UC02 - Cadastrar turma e matricular aluno (API)', () => {
     expect((await request(app).delete(`/api/turmas/${turma.id}/alunos/${aluno.id}`)).status).toBe(404);
   });
 });
+
+afterAll(fecharBanco);
