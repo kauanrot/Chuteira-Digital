@@ -13,6 +13,7 @@ function paraDominio(row) {
     vagas: row.vagas,
   });
   // Carrega as matriculas direto no estado da entidade (ja validadas quando gravadas).
+  turma.professorId = row.professorId ? paraIdDominio(row.professorId) : undefined;
   turma.alunosMatriculados = row.matriculas.map((m) => PrismaAlunoRepository.paraDominio(m.aluno));
   return turma;
 }
@@ -26,7 +27,9 @@ class PrismaTurmaRepository {
     this.prisma = prisma;
   }
   async salvar(turma) {
-    const dados = { nome: turma.nome, categoria: turma.categoria, local: turma.local ?? null, vagas: turma.vagas };
+    const dados = { nome: turma.nome, categoria: turma.categoria, local: turma.local ?? null, vagas: turma.vagas,
+      professorId: paraIdBanco(turma.professorId),
+    };
     const alunoIds = turma.listarAlunos().map((a) => paraIdBanco(a.id));
 
     const id = await this.prisma.$transaction(async (tx) => {

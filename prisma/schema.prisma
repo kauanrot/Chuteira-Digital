@@ -9,25 +9,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Perfil {
+  ADMIN
+  PROFESSOR
+  RESPONSAVEL
+}
+
+// Conta de acesso ao sistema. A senha nunca e gravada: apenas o hash bcrypt.
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senhaHash String
+  perfil    Perfil
+  criadoEm  DateTime @default(now())
+  turmas    Turma[]
+  alunos    Aluno[]
+}
+
 model Aluno {
-  id             Int         @id @default(autoincrement())
-  nome           String
-  dataNascimento DateTime    @db.Date
-  responsavel    String?
-  telefone       String?
-  email          String?
-  matriculas     Matricula[]
-  presencas      Presenca[]
+  id                   Int         @id @default(autoincrement())
+  nome                 String
+  dataNascimento       DateTime    @db.Date
+  responsavel          String?
+  telefone             String?
+  email                String?
+  // Conta (perfil RESPONSAVEL) que pode acompanhar este aluno.
+  responsavelUsuarioId Int?
+  responsavelUsuario   Usuario?    @relation(fields: [responsavelUsuarioId], references: [id], onDelete: SetNull)
+  matriculas           Matricula[]
+  presencas            Presenca[]
 }
 
 model Turma {
-  id        Int         @id @default(autoincrement())
-  nome      String
-  categoria String
-  local     String?
-  vagas     Int
-  matriculas Matricula[]
-  chamadas  Chamada[]
+  id          Int         @id @default(autoincrement())
+  nome        String
+  categoria   String
+  local       String?
+  vagas       Int
+  // Conta (perfil PROFESSOR) responsavel pela turma.
+  professorId Int?
+  professor   Usuario?    @relation(fields: [professorId], references: [id], onDelete: SetNull)
+  matriculas  Matricula[]
+  chamadas    Chamada[]
 }
 
 model Matricula {

@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const h = require('../middleware/asyncHandler');
 
+/** Cadastro de alunos: apenas o administrador (ver src/app.js). */
 module.exports = (alunoService) => {
   const r = Router();
   r.post('/', h(async (req, res) => res.status(201).json(await alunoService.cadastrar(req.body))));
