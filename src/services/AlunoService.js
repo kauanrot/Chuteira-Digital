@@ -1,10 +1,12 @@
 const Aluno = require('../models/Aluno');
 const { AppError, NotFoundError } = require('../errors');
+const { validarConta } = require('./contas');
 
 /** UC01 - Cadastrar aluno */
 class AlunoService {
-  constructor(alunoRepo) {
+  constructor(alunoRepo, usuarioRepo) {
     this.alunoRepo = alunoRepo;
+    this.usuarioRepo = usuarioRepo;
   }
   async cadastrar(dados) {
     let aluno;
@@ -13,6 +15,7 @@ class AlunoService {
     } catch (e) {
       throw new AppError(e.message, 400);
     }
+    await validarConta(this.usuarioRepo, aluno.responsavelUsuarioId, 'RESPONSAVEL');
     return this.alunoRepo.salvar(aluno);
   }
   async listar() {
@@ -31,6 +34,7 @@ class AlunoService {
     } catch (e) {
       throw new AppError(e.message, 400);
     }
+    await validarConta(this.usuarioRepo, novo.responsavelUsuarioId, 'RESPONSAVEL');
     return this.alunoRepo.salvar(novo);
   }
 }

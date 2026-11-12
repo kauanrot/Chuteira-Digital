@@ -3,7 +3,7 @@
  * Menores de idade precisam ter um responsavel cadastrado.
  */
 class Aluno {
-  constructor({ id, nome, dataNascimento, responsavel, telefone, email }) {
+  constructor({ id, nome, dataNascimento, responsavel, telefone, email, responsavelUsuarioId }) {
     if (typeof nome !== 'string' || nome.trim() === '') {
       throw new Error('Nome do aluno e obrigatorio.');
     }
@@ -24,6 +24,8 @@ class Aluno {
     this.responsavel = responsavel ? String(responsavel).trim() : undefined;
     this.telefone = telefone;
     this.email = email;
+    // Conta (perfil RESPONSAVEL) que pode acompanhar o aluno; opcional.
+    this.responsavelUsuarioId = responsavelUsuarioId ? String(responsavelUsuarioId) : undefined;
 
     if (this.getIdade() < 18 && !this.responsavel) {
       throw new Error('Responsavel e obrigatorio para alunos menores de idade.');

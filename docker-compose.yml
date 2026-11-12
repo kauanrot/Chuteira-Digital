@@ -32,6 +32,12 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-chuteira}:${POSTGRES_PASSWORD:-chuteira}@db:5432/${POSTGRES_DB:-chuteira_digital}?schema=public
       PORT: 3000
+      # Login: defina no .env (ver .env.example). JWT_SECRET e obrigatorio aqui.
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no .env}
+      ADMIN_NOME: ${ADMIN_NOME:-Secretaria}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_SENHA: ${ADMIN_SENHA:-}
     depends_on:
       db:
         condition: service_healthy

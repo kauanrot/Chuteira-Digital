@@ -9,6 +9,7 @@ function paraDominio(row) {
     responsavel: ouUndefined(row.responsavel),
     telefone: ouUndefined(row.telefone),
     email: ouUndefined(row.email),
+    responsavelUsuarioId: row.responsavelUsuarioId ? paraIdDominio(row.responsavelUsuarioId) : undefined,
   });
 }
 
@@ -19,6 +20,7 @@ function paraBanco(aluno) {
     responsavel: aluno.responsavel ?? null,
     telefone: aluno.telefone ?? null,
     email: aluno.email ?? null,
+    responsavelUsuarioId: paraIdBanco(aluno.responsavelUsuarioId),
   };
 }
 
