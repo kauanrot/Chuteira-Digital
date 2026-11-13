@@ -34,7 +34,7 @@ export default function Login({ aoEntrar, aviso }) {
       <aside className="login-marca">
         <span className="login-logo"><Logo tamanho={56} /></span>
         <p className="login-nome">Chuteira Digital</p>
-        <p className="login-frase">Gestão completa da sua escola de futebol</p>
+        <p className="login-frase">Gestão completa da sua escola de futebol -AWS</p>
       </aside>
 
       <main className="login-area">
