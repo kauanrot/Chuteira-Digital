@@ -4,6 +4,8 @@ Testes automatizados com **Jest + Supertest**, executados na esteira (Jenkins) a
 
 Como rodar: `npm test` (gera o relatorio de cobertura em `coverage/`).
 
+> Observacao: nao foi possivel gravar a esteira rodando no Jenkins, porque o ambiente (Jenkins e Docker) nao estava instalado nem em execucao na maquina usada para a entrega. O video e os prints mostram a execucao local dos mesmos testes automatizados que a esteira roda (npx jest), definida no Jenkinsfile do repositorio.
+
 ## UC01 - Cadastrar aluno
 
 Arquivo: `tests/aluno.test.js`
